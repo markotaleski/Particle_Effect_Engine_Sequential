@@ -1,7 +1,6 @@
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
+
 
 public class Input {
 
@@ -18,21 +17,21 @@ public class Input {
         this.main = main;  // reference of Main class
     }
 
-    public void inputs() {
+    public VBox inputs() {
 
-        particleField = new TextField(); // input for num of particles
+        particleField = new TextField("200"); // input for num of particles
         particleField.setPromptText("Number of Particles");
 
-        widthField = new TextField(); // input for width
+        widthField = new TextField("800"); // input for width
         widthField.setPromptText("Window Width");
 
-        heightField = new TextField(); // input for height
+        heightField = new TextField("600"); // input for height
         heightField.setPromptText("Window Height");
 
-        emitterXField = new TextField(); // input for x emitter
+        emitterXField = new TextField("400"); // input for x emitter
         emitterXField.setPromptText("Emitter X Position");
 
-        emitterYField = new TextField(); // input for y emitter
+        emitterYField = new TextField("300"); // input for y emitter
         emitterYField.setPromptText("Emitter Y Position");
 
         emitTypeChoice = new ChoiceBox<>(); // emission type
@@ -61,12 +60,7 @@ public class Input {
 
         // Box layout
         VBox layout = new VBox(10, particleField, widthField, heightField, emitterXField, emitterYField, emitTypeChoice, startButton);
-
-
-        Scene scene = new Scene(layout, 300, 400);
-        Stage stage = new Stage();
-        stage.setTitle("Particle System Configurator");
-        stage.setScene(scene);
-        stage.show();
+        layout.setPrefWidth(200);
+        return layout;
     }
 }
