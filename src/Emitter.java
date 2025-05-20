@@ -9,7 +9,7 @@ public class Emitter {
     private int maxPart;
     private String emitType;
     private double width, height;
-    private boolean hasEmitted = false; // new field
+    private boolean hasEmitted = false;
     private int totalEmitted = 0;
 
     public Emitter(double x, double y, double emitRate, int maxPart, String emitType, double width, double height) {
@@ -27,7 +27,7 @@ public class Emitter {
         if ("continuous".equals(emitType)) { // Continuous emission
             if (totalEmitted < maxPart) {
                 for (int i = 0; i < emitRate && totalEmitted < maxPart; i++) {
-                    particles.add(new Particle(x, y, Math.random() * 2 - 1, Math.random() * 2 - 1, 5.0, width, height));
+                    particles.add(new Particle(x, y, Math.random() * 2 - 1, Math.random() * 2 - 1, 15.0, width, height));
                     totalEmitted++;
                 }
             }
@@ -35,7 +35,7 @@ public class Emitter {
         else if ("burst".equals(emitType)) { // Burst emision
             if (!hasEmitted) {
                 for (int i = 0; i < maxPart; i++) {
-                    particles.add(new Particle(x, y, Math.random() * 2 - 1, Math.random() * 2 - 1, 5.0, width, height));
+                    particles.add(new Particle(x, y, Math.random() * 2 - 1, Math.random() * 2 - 1, 15.0, width, height));
                 }
                 hasEmitted = true;
             }
@@ -82,4 +82,8 @@ public class Emitter {
         }
         return false;
     }
+    public int getParticlesCount() {
+        return particles.size();
+    }
 }
+

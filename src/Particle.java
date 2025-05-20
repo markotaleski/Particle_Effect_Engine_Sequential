@@ -46,7 +46,6 @@ public class Particle {
     }
 
     public void render(GraphicsContext g) {
-
         g.setFill(Color.rgb(0, 0, 255, 1.0));
         g.fillOval(x, y, 5, 5);
     }

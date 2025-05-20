@@ -3,10 +3,10 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main extends Application {
     private Emitter emitter;
@@ -14,12 +14,14 @@ public class Main extends Application {
     private GraphicsContext g;
     private AnimationTimer timer;
     private BorderPane root;
+    private long prev = System.nanoTime();
+    private int frameCount = 0;
+    private final List<Integer> fpsList = new ArrayList<>();
 
 
     @Override
     public void start(Stage primaryStage) {
         root = new BorderPane();
-
 
         canvas = new Canvas(800,600);
         g=canvas.getGraphicsContext2D();
@@ -48,34 +50,43 @@ public class Main extends Application {
         // initialize the emitter
         emitter = new Emitter(emitterX, emitterY, 5, nParticles, emitType, width, height);
 
+        prev = System.nanoTime();
+        frameCount = 0;
+        fpsList.clear();
+
         animation();
     }
 
     private void animation() {
-        AnimationTimer timer = new AnimationTimer() {
-            private long startTime = System.nanoTime();  // Store the start time of the animation
-            private boolean isStarted = false;
-
+            timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                if (!isStarted) {
-                    startTime = System.nanoTime();
-                    isStarted = true;
-                }
+                calcFps(now);
+
                 g.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
                 emitter.emit();
                 emitter.update();
                 emitter.render(g);
 
                 if (emitter.finished()) {
-                    long endTime = System.nanoTime();
-                    double totalTimeInSeconds = (endTime - startTime) / 1_000_000_000.0;
-                    System.out.println("Total animation time: " + totalTimeInSeconds + " seconds");
-                    stop();
+                    timer.stop();
+                    double avgFps = fpsList.stream().mapToInt(Integer::intValue).average().orElse(0.0);
+                    System.out.println("Average FPS: " + avgFps);
                 }
             }
         };
         timer.start();
+    }
+    private void calcFps(long now) {
+        if (now - prev > 1_000_000_000) {
+            fpsList.add(frameCount);
+            System.out.println("FPS: " + frameCount);
+            System.out.println("Number of particles: " + emitter.getParticlesCount());
+            prev = now;
+            frameCount = 0;
+        } else {
+            frameCount++;
+        }
     }
 
     public static void main(String[] args) {
