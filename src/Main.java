@@ -35,7 +35,7 @@ public class Main extends Application {
         primaryStage.setTitle("Particle Effect Engine");
         primaryStage.show();
 
-        build(200,800,600,400,300, "continuous");
+        build(100,800,600,400,300, "continuous");
     }
 
 
@@ -69,8 +69,9 @@ public class Main extends Application {
                 emitter.render(g);
 
                 if (emitter.finished()) {
+                    double avgFps = 0;
                     timer.stop();
-                    double avgFps = fpsList.stream().mapToInt(Integer::intValue).average().orElse(0.0);
+                    avgFps = fpsList.stream().mapToInt(Integer::intValue).average().orElse(0.0);
                     System.out.println("Average FPS: " + avgFps);
                 }
             }
@@ -81,7 +82,6 @@ public class Main extends Application {
         if (now - prev > 1_000_000_000) {
             fpsList.add(frameCount);
             System.out.println("FPS: " + frameCount);
-            System.out.println("Number of particles: " + emitter.getParticlesCount());
             prev = now;
             frameCount = 0;
         } else {

@@ -82,8 +82,5 @@ public class Emitter {
         }
         return false;
     }
-    public int getParticlesCount() {
-        return particles.size();
-    }
 }
 
